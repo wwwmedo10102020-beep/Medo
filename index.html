@@ -6,219 +6,218 @@
     <title>Mido & Dina | ذكرى</title>
     <style>
         :root {
-            --primary-color: #e91e63;
-            --bg-glass: rgba(255, 255, 255, 0.1);
+            --primary: #ff0055;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&w=1000&q=80');
-            background-size: cover;
-            background-attachment: fixed;
+            background: #1a1a1a;
             color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             min-height: 100vh;
         }
 
-        /* شاشة القفل */
+        /* شاشة القفل - كما في الفيديو */
         #lock-screen {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.85);
+            background: linear-gradient(to bottom, #2c3e50, #000000);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(15px);
+            z-index: 9999;
+            transition: 0.5s;
         }
 
-        .lock-box {
-            background: var(--bg-glass);
-            padding: 30px;
-            border-radius: 20px;
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            width: 80%;
+            width: 85%;
             max-width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        input[type="password"], input[type="text"] {
+        input {
             width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 12px;
             border: none;
+            background: rgba(0,0,0,0.3);
+            color: white;
             text-align: center;
-            background: rgba(255,255,255,0.2);
-            color: white;
+            box-sizing: border-box;
         }
 
-        button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 10px;
-            cursor: pointer;
+        button.btn-main {
             width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            border-radius: 12px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         /* المحتوى الرئيسي */
-        #main-content {
-            display: none;
-            width: 90%;
-            max-width: 500px;
-            padding: 20px 0;
+        #main-app {
+            display: none; /* مخفي حتى إدخال الباسورد */
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
         }
 
         .header-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            padding: 20px;
+            background: var(--glass);
             border-radius: 20px;
-            margin-bottom: 20px;
+            padding: 20px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* العداد */
-        .timer-grid {
+        /* العداد الزمني المتقدم */
+        .timer-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
-        .timer-item {
-            background: rgba(0,0,0,0.3);
+        .timer-box {
+            background: rgba(0,0,0,0.4);
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 15px;
         }
 
-        .timer-item span { display: block; font-size: 20px; font-weight: bold; }
-        .timer-item label { font-size: 12px; opacity: 0.8; }
+        .timer-box span { display: block; font-size: 22px; font-weight: bold; }
+        .timer-box label { font-size: 11px; color: #aaa; }
 
         /* مشغل الموسيقى */
-        .music-player {
-            background: var(--bg-glass);
+        .music-bar {
+            background: var(--glass);
             padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-        }
-
-        /* قائمة الذكريات */
-        .memory-card {
-            background: var(--bg-glass);
-            border-radius: 20px;
-            overflow: hidden;
             margin-bottom: 20px;
-            animation: slideUp 0.5s ease;
         }
 
-        .memory-card img {
+        /* الكروت والذكريات */
+        .memory-item {
+            background: var(--glass);
+            border-radius: 25px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .memory-item img {
             width: 100%;
-            height: 250px;
+            height: 300px;
             object-fit: cover;
         }
 
-        .memory-info {
-            padding: 15px;
-        }
-
-        .memory-date {
+        .memory-content { padding: 20px; }
+        .date-badge {
+            background: #fff;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 8px;
             font-size: 12px;
-            color: var(--primary-color);
-            background: rgba(255,255,255,0.9);
-            padding: 2px 8px;
-            border-radius: 5px;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
-        <div class="lock-box">
-            <div style="font-size: 40px;">🔐</div>
-            <h2>Mido & Dina</h2>
-            <input type="password" id="passInput" placeholder="كلمة السر..">
-            <button onclick="unlock()">دخول</button>
+        <div class="login-card">
+            <span style="font-size: 50px;">🔐</span>
+            <h2 style="margin: 10px 0;">Mido & Dina</h2>
+            <input type="password" id="pin" placeholder="كلمة السر..">
+            <button class="btn-main" onclick="checkPin()">دخول</button>
         </div>
     </div>
 
-    <div id="main-content">
+    <div id="main-app">
         <div class="header-card">
-            <h2>❤️ Mido & Dina</h2>
-            <div class="timer-grid">
-                <div class="timer-item"><span id="days">00</span><label>يوم</label></div>
-                <div class="timer-item"><span id="hours">00</span><label>ساعة</label></div>
-                <div class="timer-item"><span id="mins">00</span><label>دقيقة</label></div>
-                <div class="timer-item"><span id="secs">00</span><label>ثانية</label></div>
+            <h2 id="app-title">❤️ Mido & Dina</h2>
+            <div class="timer-container">
+                <div class="timer-box"><span id="d">0</span><label>يوم</label></div>
+                <div class="timer-box"><span id="h">0</span><label>ساعة</label></div>
+                <div class="timer-box"><span id="m">0</span><label>دقيقة</label></div>
+                <div class="timer-box"><span id="s">0</span><label>ثانية</label></div>
             </div>
         </div>
 
-        <div class="music-player">
-            <button onclick="toggleMusic()" style="width: auto;">▶️</button>
-            <div style="flex-grow: 1;">أغنيتنا المفضلة 🎵</div>
-            <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+        <div class="music-bar">
+            <button onclick="playMusic()" style="background:none; border:none; font-size:25px; cursor:pointer;">▶️</button>
+            <div style="flex-grow:1">
+                <div style="font-size: 14px; font-weight:bold;">أغنيتنا المفضلة 🎵</div>
+                <div style="font-size: 12px; color:#ccc;">جاري التشغيل...</div>
+            </div>
+            <audio id="track" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
         </div>
 
-        <div id="memories-list">
-            <div class="memory-card">
-                <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=500&q=60" alt="">
-                <div class="memory-info">
-                    <span class="memory-date">2025-01-01</span>
+        <div id="memories">
+            <div class="memory-item">
+                <img src="https://images.unsplash.com/photo-1518196775189-da5955650d8b?w=500" alt="ذكرى">
+                <div class="memory-content">
+                    <span class="date-badge">2025-01-01</span>
                     <h3>أول مقابلة</h3>
-                    <p>لما اتقابلنا أول مرة في المكان اللي بنحبه..</p>
+                    <p>هنا كانت البداية التي لم نكن نعرف أنها ستستمر للأبد..</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // دالة الدخول
-        function unlock() {
-            const pass = document.getElementById('passInput').value;
-            if(pass === "1234") { // كلمة السر الافتراضية
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                startTimer();
+        // 1. وظيفة الدخول (الباسورد هو 2025)
+        function checkPin() {
+            const val = document.getElementById('pin').value;
+            if(val === "2025") {
+                document.getElementById('lock-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'block';
+                    startCounter();
+                }, 500);
             } else {
-                alert("كلمة السر خطأ!");
+                alert("كلمة السر خطأ! جرب 2025");
             }
         }
 
-        // العداد التصاعدي (تاريخ البداية)
-        const startDate = new Date("January 1, 2024 00:00:00").getTime();
+        // 2. العداد الزمني (تعديل التاريخ من هنا)
+        const loveDate = new Date("January 1, 2024 00:00:00").getTime();
 
-        function startTimer() {
+        function startCounter() {
             setInterval(() => {
                 const now = new Date().getTime();
-                const diff = now - startDate;
+                const diff = now - loveDate;
 
-                document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000);
             }, 1000);
         }
 
-        // تشغيل الموسيقى
-        function toggleMusic() {
-            const audio = document.getElementById('bgMusic');
-            if (audio.paused) audio.play();
-            else audio.pause();
+        // 3. تشغيل الموسيقى
+        function playMusic() {
+            const audio = document.getElementById('track');
+            if(audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
         }
     </script>
 </body>
