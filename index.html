@@ -135,7 +135,7 @@
         window.onload = () => { renderMemories(); };
 
         function unlock() {
-            if(document.getElementById('pinCode').value === "20/1") {
+            if(document.getElementById('pinCode').value === "201") {
                 audio.play().catch(() => {});
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
