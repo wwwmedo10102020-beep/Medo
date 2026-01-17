@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mido & Dina | ذكرى حبنا</title>
+    <title>Mido & Dina | قولي ليه</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,12 +48,15 @@
         .timer-box span { display: block; font-size: 22px; font-weight: bold; }
         .timer-box label { font-size: 11px; color: #ccc; }
 
-        /* مشغل الموسيقى */
+        /* مشغل يوتيوب المخفي */
+        #player { display: none; }
+
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
             padding: 15px 20px; border-radius: 20px;
             display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
             box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3);
+            cursor: pointer;
         }
         .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
@@ -88,7 +91,7 @@
         <div class="lock-card">
             <span style="font-size: 60px;">🔐</span>
             <h2>Mido & Dina</h2>
-            <input type="password" id="pinCode" placeholder="باسورد (2025)">
+            <input type="password" id="pinCode" placeholder="الباسورد (2025)">
             <button class="btn-add" style="margin-top:10px" onclick="unlock()">دخول</button>
         </div>
     </div>
@@ -104,15 +107,14 @@
             </div>
         </div>
 
-        <div class="music-bar">
-            <button class="play-btn" onclick="togglePlay()" id="playIcon">▶</button>
+        <div id="player"></div>
+
+        <div class="music-bar" onclick="togglePlay()">
+            <button class="play-btn" id="playIcon">▶</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">حب طلع كمين 🎵</div>
-                <div style="font-size: 12px; opacity: 0.8;">مهرجان خاص</div>
+                <div style="font-weight: bold;">قولّي ليه - تومي وحوده 🎵</div>
+                <div style="font-size: 12px; opacity: 0.8;">ريد بُل مزيكا صالونات</div>
             </div>
-            <audio id="audioTrack" loop>
-                <source src="Albumaty.Com_mhrganat_mhrgan_hb_tla_kmyn_2.mp3" type="audio/mpeg">
-            </audio>
         </div>
 
         <div class="admin-section">
@@ -127,7 +129,26 @@
         <div id="feed"></div>
     </div>
 
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <script>
+        let player;
+        // تحميل فيديو يوتيوب
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'Nqp3Asr-E7Q', // ID الفيديو اللي بعته
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // المشغل جاهز
+        }
+
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
@@ -139,14 +160,14 @@
             } else { alert("خطأ!"); }
         }
 
-        const audio = document.getElementById('audioTrack');
         function togglePlay() {
-            if(audio.paused) {
-                audio.play().catch(e => alert("تأكد من وجود ملف الأغنية بجانب ملف الموقع بنفس الاسم"));
-                document.getElementById('playIcon').innerText = "⏸";
-            } else {
-                audio.pause();
+            const state = player.getPlayerState();
+            if(state === 1) { // 1 تعني جاري التشغيل
+                player.pauseVideo();
                 document.getElementById('playIcon').innerText = "▶";
+            } else {
+                player.playVideo();
+                document.getElementById('playIcon').innerText = "⏸";
             }
         }
 
