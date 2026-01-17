@@ -85,7 +85,7 @@
             border: 1px solid rgba(255,255,255,0.1); position: relative;
             animation: slideUp 0.5s ease forwards;
         }
-        .memory-card img { width: 100%; height: 280px; object-fit: cover; }
+        .memory-card img, .memory-card video { width: 100%; height: 280px; object-fit: cover; border: none; }
         .memory-body { padding: 20px; }
         .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
         
@@ -133,9 +133,9 @@
         </div>
 
         <div class="admin-section">
-            <h3 style="margin-top:0">إضافة ذكرى جديدة 📸</h3>
+            <h3 style="margin-top:0">إضافة ذكرى جديدة (فيديو أو صورة) 📸</h3>
             <input type="text" id="mTitle" placeholder="عنوان الذكرى..">
-            <input type="text" id="mImg" value="https://e.top4top.io/p_3669wvmft1.jpg" placeholder="رابط الصورة">
+            <input type="text" id="mLink" placeholder="ضع رابط الصورة أو الفيديو هنا..">
             <input type="date" id="mDate">
             <textarea id="mDesc" placeholder="اكتب مشاعرك هنا.."></textarea>
             <button class="btn-add" onclick="addNewMemory()">حفظ الذكرى للأبد ✨</button>
@@ -167,16 +167,25 @@
             else { audio.pause(); document.getElementById('playIcon').innerText = "▶"; }
         }
 
+        // دالة للتحقق هل الرابط فيديو أم صورة
+        function isVideo(url) {
+            return url.match(/\.(mp4|webm|ogg|mov)$/i) != null;
+        }
+
         function addNewMemory() {
             const title = document.getElementById('mTitle').value;
-            const img = document.getElementById('mImg').value;
+            const link = document.getElementById('mLink').value;
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
-            if(!title || !date) return alert("من فضلك أدخل العنوان والتاريخ");
-            const newMemory = { id: Date.now(), title, img, date, desc };
+
+            if(!title || !date || !link) return alert("من فضلك أكمل البيانات (العنوان، الرابط، التاريخ)");
+
+            const newMemory = { id: Date.now(), title, link, date, desc };
             memories.unshift(newMemory);
             saveData();
+            
             document.getElementById('mTitle').value = '';
+            document.getElementById('mLink').value = '';
             document.getElementById('mDesc').value = '';
         }
 
@@ -194,17 +203,24 @@
 
         function renderMemories() {
             const feed = document.getElementById('feed');
-            feed.innerHTML = memories.map(m => `
+            feed.innerHTML = memories.map(m => {
+                // اختيار وسم الفيديو أو الصورة بناءً على الرابط
+                const mediaHtml = isVideo(m.link) 
+                    ? `<video src="${m.link}" controls></video>` 
+                    : `<img src="${m.link}">`;
+
+                return `
                 <div class="memory-card">
                     <button class="delete-btn" onclick="deleteMemory(${m.id})">×</button>
-                    <img src="${m.img}">
+                    ${mediaHtml}
                     <div class="memory-body">
                         <span class="date-badge">${m.date}</span>
                         <h3 style="margin:10px 0">${m.title}</h3>
                         <p style="margin:0; opacity:0.9; font-size:14px;">${m.desc}</p>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         const startPoint = new Date("January 1, 2024 00:00:00").getTime();
