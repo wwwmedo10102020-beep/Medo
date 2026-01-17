@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mido & Dina | قولي ليه</title>
+    <title>Mido & Dina | رايقة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,9 +48,7 @@
         .timer-box span { display: block; font-size: 22px; font-weight: bold; }
         .timer-box label { font-size: 11px; color: #ccc; }
 
-        /* مشغل يوتيوب المخفي */
-        #player { display: none; }
-
+        /* مشغل الموسيقى */
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
             padding: 15px 20px; border-radius: 20px;
@@ -107,14 +105,15 @@
             </div>
         </div>
 
-        <div id="player"></div>
-
         <div class="music-bar" onclick="togglePlay()">
-            <button class="play-btn" id="playIcon">▶</button>
+            <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">قولّي ليه - تومي وحوده 🎵</div>
-                <div style="font-size: 12px; opacity: 0.8;">ريد بُل مزيكا صالونات</div>
+                <div style="font-weight: bold;">رايقة - عمرو دياب 🎵</div>
+                <div style="font-size: 12px; opacity: 0.8;">تعمل الآن تلقائياً</div>
             </div>
+            <audio id="audioTrack" loop>
+                <source src="Albumaty.Com_Amr_Diab_Ray2ah.mp3" type="audio/mpeg">
+            </audio>
         </div>
 
         <div class="admin-section">
@@ -129,28 +128,14 @@
         <div id="feed"></div>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-
     <script>
-        let player;
-        // تحميل فيديو يوتيوب
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: 'Nqp3Asr-E7Q', // ID الفيديو اللي بعته
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // المشغل جاهز
-        }
+        const audio = document.getElementById('audioTrack');
 
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
+                // تشغيل الأغنية فور الضغط على دخول (هذا يسمح بالتشغيل التلقائي)
+                audio.play().catch(e => console.log("تحتاج لتفاعل المستخدم أولاً"));
+                
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
@@ -161,13 +146,12 @@
         }
 
         function togglePlay() {
-            const state = player.getPlayerState();
-            if(state === 1) { // 1 تعني جاري التشغيل
-                player.pauseVideo();
-                document.getElementById('playIcon').innerText = "▶";
-            } else {
-                player.playVideo();
+            if(audio.paused) {
+                audio.play();
                 document.getElementById('playIcon').innerText = "⏸";
+            } else {
+                audio.pause();
+                document.getElementById('playIcon').innerText = "▶";
             }
         }
 
