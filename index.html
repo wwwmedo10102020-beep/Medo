@@ -90,3 +90,138 @@
         .memory-card img { width: 100%; height: 280px; object-fit: cover; }
         .memory-body { padding: 20px; }
         .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        
+        .delete-btn {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(255,0,0,0.7); border: none; color: white;
+            padding: 5px 10px; border-radius: 50%; cursor: pointer; z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <div class="lock-card">
+            <span style="font-size: 60px;">🔐</span>
+            <h2>Mido & Dina</h2>
+            <input type="password" id="pinCode" placeholder="الباسورد (2025)">
+            <button class="btn-add" style="margin-top:10px" onclick="unlock()">دخول</button>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <div class="header-card">
+            <h1>❤️ Mido & Dina</h1>
+            <div class="timer-grid">
+                <div class="timer-box"><span id="d">0</span><label>يوم</label></div>
+                <div class="timer-box"><span id="h">0</span><label>ساعة</label></div>
+                <div class="timer-box"><span id="m">0</span><label>دقيقة</label></div>
+                <div class="timer-box"><span id="s">0</span><label>ثانية</label></div>
+            </div>
+        </div>
+
+        <div class="music-bar" onclick="togglePlay()">
+            <button class="play-btn" id="playIcon">⏸</button>
+            <div style="flex-grow:1">
+                <div style="font-weight: bold;">رايقة - عمرو دياب 🎵</div>
+                <div style="font-size: 12px; opacity: 0.8;">تعمل الآن تلقائياً</div>
+            </div>
+            <audio id="audioTrack" loop>
+                <source src="Albumaty.Com_Amr_Diab_Ray2ah.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="admin-section">
+            <h3 style="margin-top:0">إضافة ذكرى جديدة 📸</h3>
+            <input type="text" id="mTitle" placeholder="العنوان (مثال: أحلى يوم)">
+            <input type="text" id="mImg" value="https://e.top4top.io/p_3669wvmft1.jpg" placeholder="رابط الصورة">
+            <input type="date" id="mDate">
+            <textarea id="mDesc" placeholder="التفاصيل.."></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ في سجل الذكريات</button>
+        </div>
+
+        <div id="feed"></div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audioTrack');
+        let memories = JSON.parse(localStorage.getItem('myMemories')) || [];
+
+        window.onload = () => {
+            renderMemories();
+        };
+
+        function unlock() {
+            if(document.getElementById('pinCode').value === "2025") {
+                audio.play().catch(e => console.log("تحتاج لتفاعل المستخدم أولاً"));
+                document.getElementById('lock-screen').style.transform = "translateY(-100%)";
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'block';
+                    startTimer();
+                }, 800);
+            } else { alert("خطأ!"); }
+        }
+
+        function togglePlay() {
+            if(audio.paused) { audio.play(); document.getElementById('playIcon').innerText = "⏸"; }
+            else { audio.pause(); document.getElementById('playIcon').innerText = "▶"; }
+        }
+
+        function addNewMemory() {
+            const title = document.getElementById('mTitle').value;
+            const img = document.getElementById('mImg').value; // سيأخذ الصورة التي أرفقتها
+            const date = document.getElementById('mDate').value;
+            const desc = document.getElementById('mDesc').value;
+
+            if(!title || !date) return alert("اكمل البيانات");
+
+            const newMemory = { id: Date.now(), title, img, date, desc };
+            memories.unshift(newMemory);
+            saveAndRender();
+
+            document.getElementById('mTitle').value = '';
+            document.getElementById('mDesc').value = '';
+            // ترك رابط الصورة كما هو للاستخدام مرة أخرى
+        }
+
+        function deleteMemory(id) {
+            if(confirm("هل تريد حذف هذه الذكرى؟")) {
+                memories = memories.filter(m => m.id !== id);
+                saveAndRender();
+            }
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('myMemories', JSON.stringify(memories));
+            renderMemories();
+        }
+
+        function renderMemories() {
+            const feed = document.getElementById('feed');
+            feed.innerHTML = memories.map(m => `
+                <div class="memory-card">
+                    <button class="delete-btn" onclick="deleteMemory(${m.id})">×</button>
+                    <img src="${m.img}">
+                    <div class="memory-body">
+                        <span class="date-badge">${m.date}</span>
+                        <h3>${m.title}</h3>
+                        <p>${m.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const startPoint = new Date("January 1, 2024 00:00:00").getTime();
+        function startTimer() {
+            setInterval(() => {
+                const diff = new Date().getTime() - startPoint;
+                document.getElementById('d').innerText = Math.floor(diff / 86400000);
+                document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000);
+                document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000);
+                document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
