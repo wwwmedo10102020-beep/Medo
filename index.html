@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mido & Dina | ذكرى</title>
+    <style>
+        :root {
+            --primary-color: #e91e63;
+            --bg-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* شاشة القفل */
+        #lock-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .lock-box {
+            background: var(--bg-glass);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 80%;
+            max-width: 350px;
+        }
+
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        /* المحتوى الرئيسي */
+        #main-content {
+            display: none;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px 0;
+        }
+
+        .header-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* العداد */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .timer-item {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .timer-item span { display: block; font-size: 20px; font-weight: bold; }
+        .timer-item label { font-size: 12px; opacity: 0.8; }
+
+        /* مشغل الموسيقى */
+        .music-player {
+            background: var(--bg-glass);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* قائمة الذكريات */
+        .memory-card {
+            background: var(--bg-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            animation: slideUp 0.5s ease;
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .memory-info {
+            padding: 15px;
+        }
+
+        .memory-date {
+            font-size: 12px;
+            color: var(--primary-color);
+            background: rgba(255,255,255,0.9);
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <div class="lock-box">
+            <div style="font-size: 40px;">🔐</div>
+            <h2>Mido & Dina</h2>
+            <input type="password" id="passInput" placeholder="كلمة السر..">
+            <button onclick="unlock()">دخول</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="header-card">
+            <h2>❤️ Mido & Dina</h2>
+            <div class="timer-grid">
+                <div class="timer-item"><span id="days">00</span><label>يوم</label></div>
+                <div class="timer-item"><span id="hours">00</span><label>ساعة</label></div>
+                <div class="timer-item"><span id="mins">00</span><label>دقيقة</label></div>
+                <div class="timer-item"><span id="secs">00</span><label>ثانية</label></div>
+            </div>
+        </div>
+
+        <div class="music-player">
+            <button onclick="toggleMusic()" style="width: auto;">▶️</button>
+            <div style="flex-grow: 1;">أغنيتنا المفضلة 🎵</div>
+            <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+        </div>
+
+        <div id="memories-list">
+            <div class="memory-card">
+                <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=500&q=60" alt="">
+                <div class="memory-info">
+                    <span class="memory-date">2025-01-01</span>
+                    <h3>أول مقابلة</h3>
+                    <p>لما اتقابلنا أول مرة في المكان اللي بنحبه..</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // دالة الدخول
+        function unlock() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === "1234") { // كلمة السر الافتراضية
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                startTimer();
+            } else {
+                alert("كلمة السر خطأ!");
+            }
+        }
+
+        // العداد التصاعدي (تاريخ البداية)
+        const startDate = new Date("January 1, 2024 00:00:00").getTime();
+
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date().getTime();
+                const diff = now - startDate;
+
+                document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }, 1000);
+        }
+
+        // تشغيل الموسيقى
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            if (audio.paused) audio.play();
+            else audio.pause();
+        }
+    </script>
+</body>
+</html>
