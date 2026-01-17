@@ -108,7 +108,7 @@
         <div class="music-bar" onclick="togglePlay()">
             <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">Albumaty.Com_Amr_Diab_Ray2ah.mp3</div>
+                <div style="font-weight: bold;">رايقة - عمرو دياب 🎵</div>
                 <div style="font-size: 12px; opacity: 0.8;">تعمل الآن تلقائياً</div>
             </div>
             <audio id="audioTrack" loop>
@@ -133,8 +133,12 @@
 
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
-                // تشغيل الأغنية فور الضغط على دخول (هذا يسمح بالتشغيل التلقائي)
-                audio.play().catch(e => console.log("تحتاج لتفاعل المستخدم أولاً"));
+                // التشغيل التلقائي يبدأ هنا بمجرد الضغط على زر "دخول"
+                audio.play().then(() => {
+                    document.getElementById('playIcon').innerText = "⏸";
+                }).catch(e => {
+                    console.log("التشغيل التلقائي واجه قيوداً من المتصفح، سيتم التشغيل عند أول ضغطة.");
+                });
                 
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
@@ -142,7 +146,7 @@
                     document.getElementById('main-app').style.display = 'block';
                     startTimer();
                 }, 800);
-            } else { alert("خطأ!"); }
+            } else { alert("خطأ في الباسورد!"); }
         }
 
         function togglePlay() {
@@ -163,7 +167,9 @@
             if(!title || !date) return alert("اكمل البيانات");
             const card = `<div class="memory-card"><img src="${img}"><div class="memory-body"><span class="date-badge">${date}</span><h3>${title}</h3><p>${desc}</p></div></div>`;
             document.getElementById('feed').insertAdjacentHTML('afterbegin', card);
-            document.getElementById('mTitle').value = ''; document.getElementById('mDesc').value = '';
+            document.getElementById('mTitle').value = ''; 
+            document.getElementById('mImg').value = '';
+            document.getElementById('mDesc').value = '';
         }
 
         const startPoint = new Date("January 1, 2024 00:00:00").getTime();
