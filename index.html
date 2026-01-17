@@ -8,7 +8,8 @@
     <style>
         :root {
             --primary: #ff0050;
-            --glass: rgba(0, 0, 0, 0.6);
+            --glass: rgba(0, 0, 0, 0.7);
+            --border-color: rgba(255, 255, 255, 0.2);
         }
 
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -26,54 +27,61 @@
             position: fixed; inset: 0; 
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10000; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background-size: cover; z-index: 10000; display: flex; justify-content: center; align-items: center;
+            transition: transform 0.8s ease-in-out;
         }
 
         .lock-card {
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 35px; text-align: center;
-            width: 85%; max-width: 380px; border: 1px solid rgba(255,255,255,0.2);
+            padding: 40px; border-radius: 35px; text-align: center; width: 85%; max-width: 380px;
         }
 
-        #main-app { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
+        #main-app { display: none; max-width: 600px; margin: 0 auto; padding: 20px; }
 
-        /* مشغل الموسيقى الرئيسي */
+        /* إطار كروت الذكريات */
+        .memory-card {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 30px; margin-bottom: 30px; border: 1px solid var(--border-color);
+            overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* إطار الصورة المخصص */
+        .image-frame {
+            width: 100%; height: 350px; padding: 10px;
+        }
+        .image-frame img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 20px;
+            border: 2px solid var(--border-color);
+        }
+
+        /* إطار الفيديو المخصص (كبير) */
+        .video-frame {
+            width: 100%; background: #000; border-bottom: 2px solid var(--primary);
+        }
+        .video-frame video {
+            width: 100%; display: block; max-height: 600px;
+        }
+
+        .memory-body { padding: 20px; }
+        .date-badge { background: var(--primary); color: white; padding: 5px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; }
+        
+        /* مشغل الموسيقى */
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
-            padding: 15px 20px; border-radius: 20px;
-            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3); cursor: pointer;
+            padding: 15px 20px; border-radius: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
         }
         .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; display: flex; align-items: center; justify-content: center; }
 
-        .admin-section {
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 25px; margin-bottom: 30px; border: 1px dashed var(--primary);
-        }
+        .admin-section { background: rgba(0,0,0,0.75); padding: 25px; border-radius: 30px; margin-bottom: 30px; border: 1px dashed var(--primary); }
         input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none; }
         .btn-add { width: 100%; padding: 15px; background: var(--primary); border: none; color: white; border-radius: 15px; font-weight: bold; cursor: pointer; }
-
-        /* كرت الذكرى المطور */
-        .memory-card {
-            background: var(--glass); backdrop-filter: blur(8px);
-            border-radius: 25px; overflow: hidden; margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.1); position: relative;
-        }
-        .memory-card img { width: 100%; height: auto; max-height: 450px; object-fit: contain; background: #000; }
-        .memory-card video { width: 100%; height: auto; max-height: 500px; background: #000; outline: none; }
         
-        .memory-body { padding: 20px; }
-        .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
-        .delete-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,0,0,0.7); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10; }
+        .delete-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,0,0,0.7); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 20px; }
 
-        /* تنسيق عداد الوقت */
-        .header-card { background: var(--glass); backdrop-filter: blur(10px); padding: 25px; border-radius: 25px; text-align: center; margin-bottom: 20px; }
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .timer-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 15px; border: 1px solid var(--primary); }
+        .header-card { background: var(--glass); padding: 25px; border-radius: 25px; text-align: center; margin-bottom: 20px; }
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .timer-box { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 15px; border: 1px solid var(--primary); }
         .timer-box span { display: block; font-size: 20px; font-weight: bold; }
-        .timer-box label { font-size: 10px; color: #ccc; }
     </style>
 </head>
 <body>
@@ -101,8 +109,7 @@
         <div class="music-bar" onclick="togglePlay()">
             <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">موسيقى الخلفية 🎵</div>
-                <div style="font-size: 11px; opacity: 0.9;">ستتوقف تلقائياً عند تشغيل فيديو</div>
+                <div style="font-weight: bold;">موسيقى الذكريات 🎵</div>
             </div>
             <audio id="audioTrack" loop>
                 <source src="https://d.top4top.io/m_3669tyjet1.mp3" type="audio/mpeg">
@@ -112,10 +119,10 @@
         <div class="admin-section">
             <h3 style="margin-top:0">إضافة ذكرى جديدة ✨</h3>
             <input type="text" id="mTitle" placeholder="العنوان..">
-            <input type="text" id="mLink" placeholder="رابط مباشر للفيديو أو الصورة..">
+            <input type="text" id="mLink" placeholder="رابط فيديو أو صورة..">
             <input type="date" id="mDate">
-            <textarea id="mDesc" placeholder="اكتب وصفاً أو ذكرى.."></textarea>
-            <button class="btn-add" onclick="addNewMemory()">حفظ الآن</button>
+            <textarea id="mDesc" placeholder="اكتب تفاصيل الذكرى.."></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ في السجل</button>
         </div>
 
         <div id="feed"></div>
@@ -136,7 +143,7 @@
                     document.getElementById('main-app').style.display = 'block';
                     startTimer();
                 }, 800);
-            } else { alert("خطأ!"); }
+            } else { alert("خطأ في الباسورد!"); }
         }
 
         function togglePlay() {
@@ -154,10 +161,9 @@
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
 
-            if(!title || !link || !date) return alert("أكمل البيانات");
+            if(!title || !link || !date) return alert("من فضلك أكمل جميع البيانات");
 
-            const newMemory = { id: Date.now(), title, link, date, desc };
-            memories.unshift(newMemory);
+            memories.unshift({ id: Date.now(), title, link, date, desc });
             saveData();
             document.getElementById('mTitle').value = '';
             document.getElementById('mLink').value = '';
@@ -172,25 +178,25 @@
         function renderMemories() {
             const feed = document.getElementById('feed');
             feed.innerHTML = memories.map(m => {
-                const media = isVideo(m.link) 
-                    ? `<video src="${m.link}" controls onplay="audio.pause(); document.getElementById('playIcon').innerText = '▶';"></video>` 
-                    : `<img src="${m.link}">`;
+                const mediaContent = isVideo(m.link) 
+                    ? `<div class="video-frame"><video src="${m.link}" controls onplay="audio.pause(); document.getElementById('playIcon').innerText = '▶';"></video></div>` 
+                    : `<div class="image-frame"><img src="${m.link}"></div>`;
 
                 return `
                 <div class="memory-card">
                     <button class="delete-btn" onclick="deleteMemory(${m.id})">×</button>
-                    ${media}
+                    ${mediaContent}
                     <div class="memory-body">
                         <span class="date-badge">${m.date}</span>
-                        <h3>${m.title}</h3>
-                        <p>${m.desc}</p>
+                        <h3 style="margin:15px 0 10px 0">${m.title}</h3>
+                        <p style="margin:0; opacity:0.8; line-height:1.6">${m.desc}</p>
                     </div>
                 </div>`;
             }).join('');
         }
 
         function deleteMemory(id) {
-            if(confirm("حذف هذه الذكرى؟")) {
+            if(confirm("هل أنت متأكد من حذف هذه الذكرى؟")) {
                 memories = memories.filter(m => m.id !== id);
                 saveData();
             }
