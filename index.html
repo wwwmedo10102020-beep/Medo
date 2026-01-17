@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mido & Dina | رايقة</title>
+    <title>Mido & Dina | ميمو</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,6 @@
         
         body {
             margin: 0;
-            /* استخدام صورتك كخلفية للموقع */
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
             background-size: cover;
@@ -41,10 +40,8 @@
             backdrop-filter: blur(20px);
             padding: 40px; border-radius: 35px; text-align: center;
             width: 85%; max-width: 380px; border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
-        /* المحتوى الرئيسي */
         #main-app { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
 
         .header-card {
@@ -68,7 +65,6 @@
         }
         .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* لوحة التحكم */
         .admin-section {
             background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
             padding: 20px; border-radius: 25px; margin-bottom: 30px;
@@ -80,11 +76,9 @@
         }
         .btn-add {
             width: 100%; padding: 15px; background: var(--primary);
-            border: none; color: white; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            border: none; color: white; border-radius: 15px; font-weight: bold; cursor: pointer;
         }
-        .btn-add:active { transform: scale(0.95); }
 
-        /* كروت الذكريات */
         .memory-card {
             background: var(--glass); backdrop-filter: blur(8px);
             border-radius: 25px; overflow: hidden; margin-bottom: 25px;
@@ -130,11 +124,11 @@
         <div class="music-bar" onclick="togglePlay()">
             <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">رايقة - عمرو دياب 🎵</div>
+                <div style="font-weight: bold;">أغنيتكم الخاصة 🎵</div>
                 <div style="font-size: 12px; opacity: 0.9;">تعمل الآن تلقائياً</div>
             </div>
             <audio id="audioTrack" loop>
-                <source src="Albumaty.Com_Amr_Diab_Ray2ah.mp3" type="audio/mpeg">
+                <source src="https://d.top4top.io/m_3669tyjet1.mp3" type="audio/mpeg">
             </audio>
         </div>
 
@@ -152,16 +146,13 @@
 
     <script>
         const audio = document.getElementById('audioTrack');
-        // استعادة الذكريات من ذاكرة المتصفح
         let memories = JSON.parse(localStorage.getItem('myMemories')) || [];
 
         window.onload = () => { renderMemories(); };
 
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
-                // تشغيل الأغنية فوراً عند الضغط
                 audio.play().catch(() => console.log("تفاعل مطلوب"));
-                
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
@@ -181,14 +172,10 @@
             const img = document.getElementById('mImg').value;
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
-
             if(!title || !date) return alert("من فضلك أدخل العنوان والتاريخ");
-
             const newMemory = { id: Date.now(), title, img, date, desc };
             memories.unshift(newMemory);
             saveData();
-            
-            // إعادة تصفير الحقول
             document.getElementById('mTitle').value = '';
             document.getElementById('mDesc').value = '';
         }
@@ -220,7 +207,6 @@
             `).join('');
         }
 
-        // عداد الوقت (منذ 1 يناير 2024 - يمكنك تغييره)
         const startPoint = new Date("January 1, 2024 00:00:00").getTime();
         function startTimer() {
             setInterval(() => {
