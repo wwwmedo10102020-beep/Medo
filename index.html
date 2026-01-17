@@ -17,11 +17,8 @@
             margin: 0;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
-            overflow-x: hidden;
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; overflow-x: hidden;
         }
 
         /* شاشة القفل */
@@ -29,73 +26,54 @@
             position: fixed; inset: 0; 
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 10000; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .lock-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);
             padding: 40px; border-radius: 35px; text-align: center;
             width: 85%; max-width: 380px; border: 1px solid rgba(255,255,255,0.2);
         }
 
         #main-app { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
 
-        .header-card {
-            background: var(--glass); backdrop-filter: blur(10px);
-            padding: 25px; border-radius: 25px; text-align: center;
-            margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
-        .timer-box { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 15px; border: 1px solid var(--primary); }
-        .timer-box span { display: block; font-size: 22px; font-weight: bold; }
-        .timer-box label { font-size: 11px; color: #ccc; }
-
-        /* مشغل الموسيقى */
+        /* مشغل الموسيقى الرئيسي */
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
             padding: 15px 20px; border-radius: 20px;
             display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3);
-            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3); cursor: pointer;
         }
-        .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; display: flex; align-items: center; justify-content: center; }
 
         .admin-section {
             background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 25px; margin-bottom: 30px;
-            border: 1px dashed var(--primary);
+            padding: 20px; border-radius: 25px; margin-bottom: 30px; border: 1px dashed var(--primary);
         }
-        input, textarea {
-            width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px;
-            border: none; background: rgba(255,255,255,0.1); color: white; outline: none;
-        }
-        .btn-add {
-            width: 100%; padding: 15px; background: var(--primary);
-            border: none; color: white; border-radius: 15px; font-weight: bold; cursor: pointer;
-        }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none; }
+        .btn-add { width: 100%; padding: 15px; background: var(--primary); border: none; color: white; border-radius: 15px; font-weight: bold; cursor: pointer; }
 
+        /* كرت الذكرى المطور */
         .memory-card {
             background: var(--glass); backdrop-filter: blur(8px);
             border-radius: 25px; overflow: hidden; margin-bottom: 25px;
             border: 1px solid rgba(255,255,255,0.1); position: relative;
-            animation: slideUp 0.5s ease forwards;
         }
-        .memory-card img, .memory-card video { width: 100%; height: 280px; object-fit: cover; border: none; }
+        .memory-card img { width: 100%; height: auto; max-height: 450px; object-fit: contain; background: #000; }
+        .memory-card video { width: 100%; height: auto; max-height: 500px; background: #000; outline: none; }
+        
         .memory-body { padding: 20px; }
         .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
-        
-        .delete-btn {
-            position: absolute; top: 15px; left: 15px;
-            background: rgba(255,0,0,0.6); border: none; color: white;
-            width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10;
-        }
+        .delete-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,0,0,0.7); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* تنسيق عداد الوقت */
+        .header-card { background: var(--glass); backdrop-filter: blur(10px); padding: 25px; border-radius: 25px; text-align: center; margin-bottom: 20px; }
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .timer-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 15px; border: 1px solid var(--primary); }
+        .timer-box span { display: block; font-size: 20px; font-weight: bold; }
+        .timer-box label { font-size: 10px; color: #ccc; }
     </style>
 </head>
 <body>
@@ -104,7 +82,6 @@
         <div class="lock-card">
             <span style="font-size: 60px;">🔐</span>
             <h2>Mido & Dina</h2>
-            <p style="font-size: 14px; opacity: 0.8;">أدخل كلمة السر للمتابعة</p>
             <input type="password" id="pinCode" placeholder="2025" style="text-align: center;">
             <button class="btn-add" style="margin-top:15px" onclick="unlock()">دخول</button>
         </div>
@@ -124,8 +101,8 @@
         <div class="music-bar" onclick="togglePlay()">
             <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">أغنيتكم الخاصة 🎵</div>
-                <div style="font-size: 12px; opacity: 0.9;">تعمل الآن تلقائياً</div>
+                <div style="font-weight: bold;">موسيقى الخلفية 🎵</div>
+                <div style="font-size: 11px; opacity: 0.9;">ستتوقف تلقائياً عند تشغيل فيديو</div>
             </div>
             <audio id="audioTrack" loop>
                 <source src="https://d.top4top.io/m_3669tyjet1.mp3" type="audio/mpeg">
@@ -133,12 +110,12 @@
         </div>
 
         <div class="admin-section">
-            <h3 style="margin-top:0">إضافة ذكرى جديدة (فيديو أو صورة) 📸</h3>
-            <input type="text" id="mTitle" placeholder="عنوان الذكرى..">
-            <input type="text" id="mLink" placeholder="ضع رابط الصورة أو الفيديو هنا..">
+            <h3 style="margin-top:0">إضافة ذكرى جديدة ✨</h3>
+            <input type="text" id="mTitle" placeholder="العنوان..">
+            <input type="text" id="mLink" placeholder="رابط مباشر للفيديو أو الصورة..">
             <input type="date" id="mDate">
-            <textarea id="mDesc" placeholder="اكتب مشاعرك هنا.."></textarea>
-            <button class="btn-add" onclick="addNewMemory()">حفظ الذكرى للأبد ✨</button>
+            <textarea id="mDesc" placeholder="اكتب وصفاً أو ذكرى.."></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ الآن</button>
         </div>
 
         <div id="feed"></div>
@@ -152,14 +129,14 @@
 
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
-                audio.play().catch(() => console.log("تفاعل مطلوب"));
+                audio.play().catch(() => {});
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
                     document.getElementById('main-app').style.display = 'block';
                     startTimer();
                 }, 800);
-            } else { alert("الباسورد خطأ ❌"); }
+            } else { alert("خطأ!"); }
         }
 
         function togglePlay() {
@@ -167,9 +144,8 @@
             else { audio.pause(); document.getElementById('playIcon').innerText = "▶"; }
         }
 
-        // دالة للتحقق هل الرابط فيديو أم صورة
         function isVideo(url) {
-            return url.match(/\.(mp4|webm|ogg|mov)$/i) != null;
+            return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|m4v)$/) != null;
         }
 
         function addNewMemory() {
@@ -178,22 +154,14 @@
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
 
-            if(!title || !date || !link) return alert("من فضلك أكمل البيانات (العنوان، الرابط، التاريخ)");
+            if(!title || !link || !date) return alert("أكمل البيانات");
 
             const newMemory = { id: Date.now(), title, link, date, desc };
             memories.unshift(newMemory);
             saveData();
-            
             document.getElementById('mTitle').value = '';
             document.getElementById('mLink').value = '';
             document.getElementById('mDesc').value = '';
-        }
-
-        function deleteMemory(id) {
-            if(confirm("هل تريد مسح هذه الذكرى؟")) {
-                memories = memories.filter(m => m.id !== id);
-                saveData();
-            }
         }
 
         function saveData() {
@@ -204,23 +172,28 @@
         function renderMemories() {
             const feed = document.getElementById('feed');
             feed.innerHTML = memories.map(m => {
-                // اختيار وسم الفيديو أو الصورة بناءً على الرابط
-                const mediaHtml = isVideo(m.link) 
-                    ? `<video src="${m.link}" controls></video>` 
+                const media = isVideo(m.link) 
+                    ? `<video src="${m.link}" controls onplay="audio.pause(); document.getElementById('playIcon').innerText = '▶';"></video>` 
                     : `<img src="${m.link}">`;
 
                 return `
                 <div class="memory-card">
                     <button class="delete-btn" onclick="deleteMemory(${m.id})">×</button>
-                    ${mediaHtml}
+                    ${media}
                     <div class="memory-body">
                         <span class="date-badge">${m.date}</span>
-                        <h3 style="margin:10px 0">${m.title}</h3>
-                        <p style="margin:0; opacity:0.9; font-size:14px;">${m.desc}</p>
+                        <h3>${m.title}</h3>
+                        <p>${m.desc}</p>
                     </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
+        }
+
+        function deleteMemory(id) {
+            if(confirm("حذف هذه الذكرى؟")) {
+                memories = memories.filter(m => m.id !== id);
+                saveData();
+            }
         }
 
         const startPoint = new Date("January 1, 2024 00:00:00").getTime();
