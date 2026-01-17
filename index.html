@@ -3,146 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mido & Dina - لوحة التحكم والذكريات</title>
+    <title>Mido & Dina | ذكرى حبنا</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff0050; --glass: rgba(255, 255, 255, 0.1); }
-        body { margin: 0; background: #121212; color: white; font-family: 'Cairo', sans-serif; }
+        :root {
+            --primary: #ff0050;
+            --glass: rgba(255, 255, 255, 0.1);
+            --bg-dark: #0a0a0a;
+        }
+
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         
+        body {
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+        }
+
         /* شاشة القفل */
         #lock-screen {
-            position: fixed; inset: 0; background: black;
-            display: flex; justify-content: center; align-items: center; z-index: 10000;
+            position: fixed; inset: 0; 
+            background: linear-gradient(135deg, #121212 0%, #000000 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* الحاوية الرئيسية */
-        .app-container { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
-
-        /* لوحة التحكم */
-        .admin-panel {
-            background: var(--glass); padding: 20px; border-radius: 20px;
-            border: 1px solid var(--primary); margin-bottom: 30px;
+        .lock-card {
+            background: var(--glass); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 30px; text-align: center;
+            width: 85%; max-width: 380px; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        input, textarea {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px;
-            border: none; background: rgba(255,255,255,0.05); color: white; outline: none;
-        }
+        /* المحتوى الرئيسي */
+        #main-app { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
 
-        .btn {
-            width: 100%; padding: 12px; border-radius: 10px; border: none;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
+        .header-card {
+            background: var(--glass); padding: 25px; border-radius: 25px;
+            text-align: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-add { background: var(--primary); color: white; }
-        .btn-toggle { background: #333; color: white; margin-bottom: 10px; }
 
         /* العداد */
-        .timer { display: flex; justify-content: space-around; margin: 20px 0; text-align: center; }
-        .timer-unit { background: var(--glass); padding: 10px; border-radius: 15px; width: 22%; }
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+        .timer-box { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 15px; border: 1px solid var(--primary); }
+        .timer-box span { display: block; font-size: 22px; font-weight: bold; }
+        .timer-box label { font-size: 11px; color: #ccc; }
+
+        /* مشغل الموسيقى المحسن */
+        .music-bar {
+            background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
+            padding: 15px 20px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3);
+        }
+        .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; }
+
+        /* لوحة التحكم */
+        .admin-section {
+            background: #1a1a1a; padding: 20px; border-radius: 20px;
+            margin-bottom: 30px; border: 1px dashed var(--primary);
+        }
+        input, textarea {
+            width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px;
+            border: none; background: #222; color: white; outline: none;
+        }
+        .btn-add {
+            width: 100%; padding: 15px; background: var(--primary);
+            border: none; color: white; border-radius: 12px; font-weight: bold; cursor: pointer;
+        }
 
         /* كروت الذكريات */
         .memory-card {
-            background: var(--glass); border-radius: 20px; overflow: hidden;
-            margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);
+            background: var(--glass); border-radius: 25px; overflow: hidden;
+            margin-bottom: 25px; animation: slideUp 0.5s ease;
         }
-        .memory-card img { width: 100%; height: 250px; object-fit: cover; }
-        .memory-body { padding: 15px; }
-        .date-tag { background: white; color: black; padding: 2px 8px; border-radius: 5px; font-size: 12px; }
+        .memory-card img { width: 100%; height: 280px; object-fit: cover; }
+        .memory-body { padding: 20px; }
+        .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
-        <div style="text-align: center; width: 80%;">
-            <h2>🔐 Mido & Dina</h2>
-            <input type="password" id="pass" placeholder="كلمة السر (2025)">
-            <button class="btn btn-add" onclick="unlock()">دخول</button>
+        <div class="lock-card">
+            <span style="font-size: 60px;">🔐</span>
+            <h2>Mido & Dina</h2>
+            <p style="opacity: 0.7;">أدخل كلمة السر للدخول</p>
+            <input type="password" id="pinCode" placeholder="2025">
+            <button class="btn-add" onclick="unlock()">دخول</button>
         </div>
     </div>
 
-    <div id="main-app" class="app-container">
-        
-        <div class="header" style="text-align: center;">
+    <div id="main-app">
+        <div class="header-card">
             <h1>❤️ Mido & Dina</h1>
-            <div class="timer">
-                <div class="timer-unit"><span id="days">0</span><br><small>يوم</small></div>
-                <div class="timer-unit"><span id="hours">0</span><br><small>ساعة</small></div>
-                <div class="timer-unit"><span id="mins">0</span><br><small>دقيقة</small></div>
-                <div class="timer-unit"><span id="secs">0</span><br><small>ثانية</small></div>
+            <div class="timer-grid">
+                <div class="timer-box"><span id="d">0</span><label>يوم</label></div>
+                <div class="timer-box"><span id="h">0</span><label>ساعة</label></div>
+                <div class="timer-box"><span id="m">0</span><label>دقيقة</label></div>
+                <div class="timer-box"><span id="s">0</span><label>ثانية</label></div>
             </div>
         </div>
 
-        <button class="btn btn-toggle" onclick="toggleAdmin()">⚙️ إضافة ذكرى جديدة</button>
+        <div class="music-bar">
+            <button class="play-btn" onclick="togglePlay()" id="playIcon">▶</button>
+            <div style="flex-grow:1">
+                <div style="font-weight: bold;">حب طلع كمين 🎵</div>
+                <div style="font-size: 12px; opacity: 0.8;">مهرجان - ذكرى خاصة</div>
+            </div>
+            <audio id="audioTrack" loop src="http://googleusercontent.com/file_content/0"></audio>
+        </div>
 
-        <div id="admin-area" class="admin-panel" style="display: none;">
-            <h3>إضافة ذكرى 📸</h3>
-            <input type="text" id="mTitle" placeholder="العنوان (مثلاً: أول مقابلة)">
-            <input type="text" id="mImage" placeholder="رابط الصورة (URL)">
+        <div class="admin-section">
+            <h3 style="margin-top:0">إضافة ذكرى جديدة 📸</h3>
+            <input type="text" id="mTitle" placeholder="اسم الذكرى..">
+            <input type="text" id="mImg" placeholder="رابط الصورة (مثل imgbb.com)">
             <input type="date" id="mDate">
-            <textarea id="mDesc" placeholder="اكتب وصفاً للذكرى..."></textarea>
-            <button class="btn btn-add" onclick="addMemory()">حفظ الذكرى</button>
+            <textarea id="mDesc" placeholder="ماذا حدث في هذا اليوم؟"></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ في سجل الذكريات</button>
         </div>
 
-        <hr style="opacity: 0.1; margin: 30px 0;">
-
-        <div id="memories-list">
+        <div id="feed">
             </div>
-
     </div>
 
     <script>
         // 1. فك القفل
         function unlock() {
-            if(document.getElementById('pass').value === "2025") {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                startTimer();
-            } else { alert("خطأ!"); }
+            if(document.getElementById('pinCode').value === "2025") {
+                const screen = document.getElementById('lock-screen');
+                screen.style.transform = "translateY(-100%)";
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    document.getElementById('main-app').style.display = 'block';
+                    startTimer();
+                }, 800);
+            } else { alert("كلمة السر خطأ!"); }
         }
 
-        // 2. إظهار/إخفاء لوحة التحكم
-        function toggleAdmin() {
-            const area = document.getElementById('admin-area');
-            area.style.display = area.style.display === 'none' ? 'block' : 'none';
+        // 2. تشغيل الموسيقى
+        const audio = document.getElementById('audioTrack');
+        function togglePlay() {
+            if(audio.paused) {
+                audio.play();
+                document.getElementById('playIcon').innerText = "⏸";
+            } else {
+                audio.pause();
+                document.getElementById('playIcon').innerText = "▶";
+            }
         }
 
-        // 3. إضافة ذكرى برمجياً
-        function addMemory() {
+        // 3. إضافة ذكرى
+        function addNewMemory() {
             const title = document.getElementById('mTitle').value;
-            const img = document.getElementById('mImage').value || 'https://via.placeholder.com/400';
+            const img = document.getElementById('mImg').value || 'https://images.unsplash.com/photo-1518196775189-da5955650d8b?w=500';
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
 
-            if(!title || !date) { alert("يرجى ملء العنوان والتاريخ"); return; }
+            if(!title || !date) return alert("اكمل البيانات!");
 
-            const list = document.getElementById('memories-list');
-            const html = `
+            const card = `
                 <div class="memory-card">
                     <img src="${img}">
                     <div class="memory-body">
-                        <span class="date-tag">${date}</span>
+                        <span class="date-badge">${date}</span>
                         <h3>${title}</h3>
-                        <p>${desc}</p>
+                        <p style="opacity:0.8">${desc}</p>
                     </div>
                 </div>
             `;
-            list.insertAdjacentHTML('afterbegin', html);
+            document.getElementById('feed').insertAdjacentHTML('afterbegin', card);
             
-            // إغلاق اللوحة ومسح الحقول
-            toggleAdmin();
+            // تصفير الحقول
             document.getElementById('mTitle').value = '';
             document.getElementById('mDesc').value = '';
         }
 
-        // 4. العداد
-        const loveDate = new Date("January 1, 2024 00:00:00").getTime();
+        // 4. العداد الزمني (تعديل التاريخ من هنا)
+        const startPoint = new Date("January 1, 2024 00:00:00").getTime();
         function startTimer() {
             setInterval(() => {
-                const diff = new Date().getTime() - loveDate;
-                document.getElementById('days').innerText = Math.floor(diff / 86400000);
-                document.getElementById('hours').innerText = Math.floor((diff % 86400000) / 3600000);
-                document.getElementById('mins').innerText = Math.floor((diff % 3600000) / 60000);
-                document.getElementById('secs').innerText = Math.floor((diff % 60000) / 1000);
+                const diff = new Date().getTime() - startPoint;
+                document.getElementById('d').innerText = Math.floor(diff / 86400000);
+                document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000);
+                document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000);
+                document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000);
             }, 1000);
         }
     </script>
