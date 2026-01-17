@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hassan & Hana | </title>
+    <title>Mido & Dina | ميمو</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -45,27 +45,15 @@
             overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* إطار الصورة المخصص */
-        .image-frame {
-            width: 100%; height: 350px; padding: 10px;
-        }
-        .image-frame img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 20px;
-            border: 2px solid var(--border-color);
-        }
+        .image-frame { width: 100%; height: 350px; padding: 10px; }
+        .image-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; border: 2px solid var(--border-color); }
 
-        /* إطار الفيديو المخصص (كبير) */
-        .video-frame {
-            width: 100%; background: #000; border-bottom: 2px solid var(--primary);
-        }
-        .video-frame video {
-            width: 100%; display: block; max-height: 600px;
-        }
+        .video-frame { width: 100%; background: #000; border-bottom: 2px solid var(--primary); }
+        .video-frame video { width: 100%; display: block; max-height: 600px; }
 
         .memory-body { padding: 20px; }
         .date-badge { background: var(--primary); color: white; padding: 5px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; }
         
-        /* مشغل الموسيقى */
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
             padding: 15px 20px; border-radius: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
@@ -89,15 +77,15 @@
     <div id="lock-screen">
         <div class="lock-card">
             <span style="font-size: 60px;">🔐</span>
-            <h2>Hassan & Hana</h2>
-            <input type="text" id="pinCode" placeholder="يوم حبنا" style="text-align: center;">
+            <h2>Mido & Dina</h2>
+            <input type="text" id="pinCode" placeholder="20/1" style="text-align: center;">
             <button class="btn-add" style="margin-top:15px" onclick="unlock()">دخول</button>
         </div>
     </div>
 
     <div id="main-app">
         <div class="header-card">
-            <h1 style="margin:0">❤️ Hassan & hana</h1>
+            <h1 style="margin:0">❤️ Mido & Dina</h1>
             <div class="timer-grid">
                 <div class="timer-box"><span id="d">0</span><label>يوم</label></div>
                 <div class="timer-box"><span id="h">0</span><label>ساعة</label></div>
@@ -109,13 +97,21 @@
         <div class="music-bar" onclick="togglePlay()">
             <button class="play-btn" id="playIcon">⏸</button>
             <div style="flex-grow:1">
-                <div style="font-weight: bold;">الاغنيه اللي بنحبها</div>
+                <div style="font-weight: bold;">موسيقى الذكريات 🎵</div>
             </div>
             <audio id="audioTrack" loop>
                 <source src="https://d.top4top.io/m_3669tyjet1.mp3" type="audio/mpeg">
             </audio>
         </div>
-   </div>
+
+        <div class="admin-section">
+            <h3 style="margin-top:0">إضافة ذكرى جديدة ✨</h3>
+            <input type="text" id="mTitle" placeholder="العنوان..">
+            <input type="text" id="mLink" placeholder="رابط فيديو أو صورة..">
+            <input type="date" id="mDate">
+            <textarea id="mDesc" placeholder="اكتب تفاصيل الذكرى.."></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ في السجل</button>
+        </div>
 
         <div id="feed"></div>
     </div>
@@ -127,7 +123,8 @@
         window.onload = () => { renderMemories(); };
 
         function unlock() {
-           if(document.getElementById('pinCode').value === "20/1") {
+            // التحقق من الباسورد الجديد
+            if(document.getElementById('pinCode').value === "20/1") {
                 audio.play().catch(() => {});
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
@@ -194,7 +191,7 @@
             }
         }
 
-        const startPoint = new Date("January 18, 2025 00:00:00").getTime();
+        const startPoint = new Date("January 1, 2024 00:00:00").getTime();
         function startTimer() {
             setInterval(() => {
                 const diff = new Date().getTime() - startPoint;
