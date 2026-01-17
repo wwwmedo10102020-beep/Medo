@@ -16,7 +16,6 @@
         
         body {
             margin: 0;
-            /* تم إضافة صورتك هنا كخلفية للموقع بالكامل */
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
             background-size: cover;
@@ -29,7 +28,6 @@
         /* شاشة القفل */
         #lock-screen {
             position: fixed; inset: 0; 
-            /* خلفية شاشة القفل باستخدام صورتك أيضاً مع تأثير ضبابي */
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://i.ibb.co/qYZb6KZS/image.jpg');
             background-size: cover;
@@ -44,10 +42,8 @@
             backdrop-filter: blur(15px);
             padding: 40px; border-radius: 30px; text-align: center;
             width: 85%; max-width: 380px; border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* المحتوى الرئيسي */
         #main-app { display: none; max-width: 500px; margin: 0 auto; padding: 20px; }
 
         .header-card {
@@ -62,7 +58,6 @@
         .timer-box span { display: block; font-size: 22px; font-weight: bold; }
         .timer-box label { font-size: 11px; color: #ccc; }
 
-        /* مشغل الموسيقى */
         .music-bar {
             background: linear-gradient(90deg, #ff0050 0%, #ff5e62 100%);
             padding: 15px 20px; border-radius: 20px;
@@ -72,7 +67,6 @@
         }
         .play-btn { background: white; color: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* لوحة التحكم */
         .admin-section {
             background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
             padding: 20px; border-radius: 20px;
@@ -91,13 +85,17 @@
             background: var(--glass); backdrop-filter: blur(5px);
             border-radius: 25px; overflow: hidden;
             margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);
-            animation: slideUp 0.5s ease;
+            position: relative;
         }
         .memory-card img { width: 100%; height: 280px; object-fit: cover; }
         .memory-body { padding: 20px; }
         .date-badge { background: white; color: black; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .delete-btn {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(255,0,0,0.7); border: none; color: white;
+            padding: 5px 10px; border-radius: 50%; cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -134,12 +132,12 @@
         </div>
 
         <div class="admin-section">
-            <h3 style="margin-top:0">حبنا 📸</h3>
-            <input type="text" id="mTitle" placeholder="اول صوره..">
-            <input type="text" id="mImg" placeholder=><https://e.top4top.io/p_3669wvmft1.jpg (URL)">
+            <h3 style="margin-top:0">إضافة ذكرى جديدة 📸</h3>
+            <input type="text" id="mTitle" placeholder="العنوان..">
+            <input type="text" id="mImg" placeholder="رابط الصورة (URL)">
             <input type="date" id="mDate">
-            <textarea id="mDesc" placeholder="بحبك.."></textarea>
-            <button class="btn-add" onclick="addNewMemory()">حفظ</button>
+            <textarea id="mDesc" placeholder="التفاصيل.."></textarea>
+            <button class="btn-add" onclick="addNewMemory()">حفظ في سجل الذكريات</button>
         </div>
 
         <div id="feed"></div>
@@ -147,11 +145,16 @@
 
     <script>
         const audio = document.getElementById('audioTrack');
+        let memories = JSON.parse(localStorage.getItem('myMemories')) || [];
+
+        // عند فتح الصفحة، عرض الذكريات المحفوظة
+        window.onload = () => {
+            renderMemories();
+        };
 
         function unlock() {
             if(document.getElementById('pinCode').value === "2025") {
                 audio.play().catch(e => console.log("تحتاج لتفاعل المستخدم أولاً"));
-                
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
@@ -162,13 +165,8 @@
         }
 
         function togglePlay() {
-            if(audio.paused) {
-                audio.play();
-                document.getElementById('playIcon').innerText = "⏸";
-            } else {
-                audio.pause();
-                document.getElementById('playIcon').innerText = "▶";
-            }
+            if(audio.paused) { audio.play(); document.getElementById('playIcon').innerText = "⏸"; }
+            else { audio.pause(); document.getElementById('playIcon').innerText = "▶"; }
         }
 
         function addNewMemory() {
@@ -176,10 +174,42 @@
             const img = document.getElementById('mImg').value || 'https://via.placeholder.com/400x300';
             const date = document.getElementById('mDate').value;
             const desc = document.getElementById('mDesc').value;
+
             if(!title || !date) return alert("اكمل البيانات");
-            const card = `<div class="memory-card"><img src="${img}"><div class="memory-body"><span class="date-badge">${date}</span><h3>${title}</h3><p>${desc}</p></div></div>`;
-            document.getElementById('feed').insertAdjacentHTML('afterbegin', card);
-            document.getElementById('mTitle').value = ''; document.getElementById('mDesc').value = '';
+
+            const newMemory = { id: Date.now(), title, img, date, desc };
+            memories.unshift(newMemory); // إضافة في البداية
+            saveAndRender();
+
+            // مسح الحقول
+            document.getElementById('mTitle').value = '';
+            document.getElementById('mImg').value = '';
+            document.getElementById('mDesc').value = '';
+        }
+
+        function deleteMemory(id) {
+            memories = memories.filter(m => m.id !== id);
+            saveAndRender();
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('myMemories', JSON.stringify(memories));
+            renderMemories();
+        }
+
+        function renderMemories() {
+            const feed = document.getElementById('feed');
+            feed.innerHTML = memories.map(m => `
+                <div class="memory-card">
+                    <button class="delete-btn" onclick="deleteMemory(${m.id})">×</button>
+                    <img src="${m.img}">
+                    <div class="memory-body">
+                        <span class="date-badge">${m.date}</span>
+                        <h3>${m.title}</h3>
+                        <p>${m.desc}</p>
+                    </div>
+                </div>
+            `).join('');
         }
 
         const startPoint = new Date("January 1, 2024 00:00:00").getTime();
