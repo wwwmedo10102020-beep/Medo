@@ -74,8 +74,8 @@
         <div class="lock-card">
             <span style="font-size: 50px;">🔐</span>
             <h2>Hassan & Hana</h2>
-            <p>  يوم حبنا (يوم/شهر)</p>
-            <input type="text" id="pinCode" placeholder="بحبك" style="text-align: center;">
+            <p>يوم حبنا (يوم/شهر)</p>
+            <input type="text" id="pinCode" placeholder="20/1" style="text-align: center;">
             <button class="btn-add" onclick="unlock()">دخول</button>
         </div>
     </div>
@@ -115,23 +115,21 @@
     </div>
 
     <script>
-        // مصفوفة الذكريات
+        // مصفوفة الذكريات - تم تصحيح الخطأ هنا
         let memories = [
-            { id: 1, title: "بداية حكايتنا", link: "https://a.top4top.io/p_3669f1b2n1.jpg", date: "2025-01-20", desc: "أجمل يوم في حياتي" 
-            { id: 1, title: "2525ا", link: "https://k.top4top.io/p_3669lkj0q1.jpg", date: "2025-01-20", desc: "25252" }
-            ];
+            { id: 1, title: "بداية حكايتنا", link: "https://a.top4top.io/p_3669f1b2n1.jpg", date: "2025-01-20", desc: "أجمل يوم في حياتي" }
+        ];
 
         const audio = document.getElementById('audioTrack');
+        // تاريخ بداية العلاقة لحساب الوقت
         const startPoint = new Date("January 18, 2025 00:00:00").getTime();
 
         function unlock() {
             const code = document.getElementById('pinCode').value.trim();
-            // تأكد أن الكود يطابق تماماً "20/1"
+            // كلمة السر هي 20/1
             if(code === "20/1") {
-                // محاولة تشغيل الصوت
                 audio.play().catch(e => console.log("Audio play blocked"));
                 
-                // حركة الاختفاء
                 document.getElementById('lock-screen').style.transform = "translateY(-100%)";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.display = 'none';
@@ -140,13 +138,18 @@
                     renderMemories();
                 }, 800);
             } else { 
-                alert("التاريخ خطأ! حاول مرة أخرى"); 
+                alert("التاريخ خطأ! حاول مرة أخرى (مثال: 20/1)"); 
             }
         }
 
         function togglePlay() {
-            if(audio.paused) { audio.play(); document.getElementById('playIcon').innerText = "⏸"; }
-            else { audio.pause(); document.getElementById('playIcon').innerText = "▶"; }
+            if(audio.paused) { 
+                audio.play(); 
+                document.getElementById('playIcon').innerText = "⏸"; 
+            } else { 
+                audio.pause(); 
+                document.getElementById('playIcon').innerText = "▶"; 
+            }
         }
 
         function isVideo(url) {
@@ -209,7 +212,7 @@
             document.body.removeChild(tempInput);
             
             adminArea.style.display = 'block';
-            alert("تم نسخ الكود بنجاح! الصقه في ملف جديد وأرسله.");
+            alert("تم نسخ الكود بنجاح! الصقه في ملف جديد وأرسله لهناء.");
         }
     </script>
 </body>
