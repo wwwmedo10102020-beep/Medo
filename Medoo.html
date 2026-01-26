@@ -3,256 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Story - مساحتنا الخاصة</title>
+    <title>Our Space ❤️</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- التصميم (CSS) --- */
         :root {
-            --primary: #a389d4;
+            --main-purple: #764ba2;
+            --light-purple: #a389d4;
+            --glass: rgba(255, 255, 255, 0.2);
             --accent: #ff4b2b;
-            --glass: rgba(255, 255, 255, 0.15);
         }
 
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-attachment: fixed;
             color: white;
-            overflow-x: hidden;
+            text-align: center;
         }
 
         /* شاشة الدخول */
-        .auth-overlay {
+        .auth-screen {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.7) url('https://www.transparenttextures.com/patterns/hearts.png');
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0,0,0,0.6) url('https://www.transparenttextures.com/patterns/hearts.png');
+            display: flex; justify-content: center; align-items: center;
             z-index: 2000;
         }
 
-        .auth-card {
+        .card {
             background: var(--glass);
             backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 30px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: 85%; max-width: 350px;
         }
 
-        /* الهيدر والقائمة */
+        /* الهيدر والقائمة الجانبية */
         header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.1);
         }
 
         #sidebar {
             position: fixed;
-            right: -280px;
-            top: 0;
-            width: 260px;
-            height: 100%;
+            right: -280px; top: 0;
+            width: 250px; height: 100%;
             background: #2b0d54;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
             z-index: 1000;
-            padding-top: 60px;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            padding-top: 50px;
         }
 
         #sidebar.active { right: 0; }
 
-        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar ul { list-style: none; padding: 0; text-align: right; }
         #sidebar li {
-            padding: 20px;
+            padding: 15px 25px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
-            transition: 0.3s;
         }
-        #sidebar li:hover { background: var(--accent); }
 
-        /* الأقسام والمحتوى */
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        section { display: none; animation: fadeIn 0.5s ease; }
+        /* الأقسام */
+        section { display: none; padding: 20px; animation: fadeIn 0.6s; }
         section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .grid-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        .grid-gallery img, .grid-gallery video {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 2px solid white;
-        }
-
-        /* حقول الإدخال */
-        input, textarea, select {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 15px;
-            border: none;
-            outline: none;
-            background: white;
-            color: #333;
-        }
-
-        .btn-main {
-            background: var(--accent);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        /* تنسيقات خاصة بكل قسم */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid img { width: 100%; border-radius: 10px; border: 2px solid white; }
 
         .music-item {
             background: var(--glass);
-            padding: 15px;
-            margin: 10px 0;
+            margin: 10px 0; padding: 15px;
             border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
+            display: flex; justify-content: space-between;
+        }
+
+        .future-item {
+            background: white; color: #333;
+            margin: 10px 0; padding: 15px;
+            border-radius: 15px; text-align: right;
+        }
+
+        input, textarea, select {
+            width: 90%; padding: 12px; margin: 10px 0;
+            border-radius: 20px; border: none;
+        }
+
+        .btn {
+            background: var(--accent); color: white;
+            padding: 10px 25px; border: none; border-radius: 20px;
+            cursor: pointer; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div id="loginPage" class="auth-overlay">
-        <div class="auth-card">
-            <div style="font-size: 50px;">❤️</div>
-            <h2 style="margin-bottom: 5px;">Our Love Story</h2>
-            <p>أدخل كلمة السر للدخول</p>
+    <div id="loginScreen" class="auth-screen">
+        <div class="card">
+            <h1 style="font-size: 50px; margin: 0;">❤️</h1>
+            <h2>Our Love Story</h2>
+            <p>أدخل كلمة السر</p>
             <input type="password" id="passCode" placeholder="7/6/2003">
-            <br><br>
-            <button class="btn-main" onclick="verify()">دخول</button>
+            <button class="btn" onclick="checkPass()">دخول</button>
         </div>
     </div>
 
     <div id="mainApp" style="display:none;">
         <header>
-            <button onclick="toggleMenu()" style="background:none; border:none; color:white; font-size: 24px;">
+            <button onclick="toggleSidebar()" style="background:none; border:none; color:white; font-size: 24px;">
                 <i class="fas fa-bars"></i>
             </button>
-            <h3>أحمد ❤️ فرح</h3>
-            <div style="width: 24px;"></div> </header>
+            <h3>Our Space 💖</h3>
+            <div style="width:24px;"></div>
+        </header>
 
         <nav id="sidebar">
             <ul>
-                <li onclick="navTo('home')"><i class="fas fa-home"></i> الرئيسية</li>
-                <li onclick="navTo('music')"><i class="fas fa-music"></i> الموسيقى</li>
-                <li onclick="navTo('gallery')"><i class="fas fa-heart"></i> معرضنا</li>
-                <li onclick="navTo('admin')"><i class="fas fa-user-shield"></i> لوحة التحكم</li>
+                <li onclick="nav('music')"><i class="fas fa-music"></i> Music (الموسيقى)</li>
+                <li onclick="nav('gallery')"><i class="fas fa-image"></i> Gallery (المعرض)</li>
+                <li onclick="nav('letter')"><i class="fas fa-envelope"></i> Letter (رسالة حب)</li>
+                <li onclick="nav('future')"><i class="fas fa-gem"></i> Future (مستقبلنا)</li>
+                <li onclick="nav('flower')"><i class="fas fa-seedling"></i> Flower (وردة ليكي)</li>
+                <li onclick="nav('admin')"><i class="fas fa-cog"></i> Admin (الإدارة)</li>
             </ul>
         </nav>
 
         <div class="container">
-            <section id="home" class="active">
-                <div class="auth-card">
-                    <h2>قصة حبنا ✨</h2>
-                    <p id="letterDisplay">كل لحظة معاكي هي ذكرى جديدة محفورة في قلبي..</p>
-                </div>
-            </section>
-
-            <section id="music">
-                <h3>أغانينا المفضلة 🎵</h3>
-                <div id="musicList">
-                    <div class="music-item"><span>كلمة - رامي صبري</span> <i class="fas fa-play"></i></div>
-                    <div class="music-item"><span>حاجة مستخبية</span> <i class="fas fa-play"></i></div>
-                </div>
+            <section id="music" class="active">
+                <h2>أغانينا المفضلة 🎵</h2>
+                <div class="music-item"><span>كلمة - رامي صبري</span> <i class="fas fa-play"></i></div>
+                <div class="music-item"><span>حاجة مستخبية</span> <i class="fas fa-play"></i></div>
+                <div class="music-item"><span>معايا - حماقي</span> <i class="fas fa-play"></i></div>
             </section>
 
             <section id="gallery">
-                <h3>معرض الذكريات 📸</h3>
-                <div class="grid-gallery" id="mediaContainer">
-                    </div>
+                <h2>معرض الذكريات 📸</h2>
+                <div class="grid" id="mediaGrid">
+                    <img src="https://via.placeholder.com/150" alt="ذكرى">
+                    <img src="https://via.placeholder.com/150" alt="ذكرى">
+                </div>
+            </section>
+
+            <section id="letter">
+                <h2>إلى حبيبتي الغالية 💌</h2>
+                <div class="card" style="width: 100%; box-sizing: border-box;">
+                    <p id="mainLetter">أنتِ أجمل ما حدث لي في حياتي، وكل يوم معكِ هو عيد بالنسبة لي..</p>
+                </div>
+            </section>
+
+            <section id="future">
+                <h2>مستقبلنا سوا ✨</h2>
+                <div class="future-item">💍 <b>الفرح:</b> يوم فرحنا وبداية حياتنا الجديدة</div>
+                <div class="future-item">👨‍👩‍👧 <b>عيلتنا:</b> نكون عيلة سعيدة مليانة حب</div>
+                <div class="future-item">✈️ <b>السفر:</b> نسافر العالم كله ونعمل ذكريات</div>
+            </section>
+
+            <section id="flower">
+                <h2>وردة ليكي 🌹</h2>
+                <img src="https://images.unsplash.com/photo-1562690868-60bbe7293e94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" style="width:80%; border-radius: 50%; border: 5px solid white; margin-top: 20px;">
+                <p>"زي ما الوردة دي جميلة، إنتي أجمل منها بمليون مرة."</p>
             </section>
 
             <section id="admin">
-                <h3>إضافة محتوى جديد 🛠️</h3>
-                <div class="auth-card" style="text-align: right;">
-                    <label>رابط الصورة أو الفيديو:</label>
-                    <input type="text" id="linkInput" placeholder="ضع الرابط هنا...">
-                    
-                    <label>نوع الملف:</label>
-                    <select id="typeInput">
-                        <option value="img">صورة</option>
-                        <option value="vid">فيديو</option>
-                    </select>
-                    
-                    <label>تحديث الرسالة الرئيسية:</label>
-                    <textarea id="msgInput" rows="3"></textarea>
-                    
-                    <button class="btn-main" style="width: 100%;" onclick="updateSite()">حفظ التغييرات</button>
+                <h2>لوحة التحكم 🔐</h2>
+                <div class="card" style="width: 100%; box-sizing: border-box;">
+                    <p>إضافة صورة جديدة:</p>
+                    <input type="text" id="imgUrl" placeholder="رابط الصورة">
+                    <button class="btn" onclick="addImg()">إضافة</button>
+                    <hr>
+                    <p>تعديل الرسالة:</p>
+                    <textarea id="newText" rows="4"></textarea>
+                    <button class="btn" onclick="updateText()">حفظ النص</button>
                 </div>
             </section>
         </div>
     </div>
 
     <script>
-        /* --- البرمجة (JS) --- */
-        const secret = "7/6/2003";
+        const correctPass = "7/6/2003";
 
-        function verify() {
-            const val = document.getElementById('passCode').value;
-            if(val === secret) {
-                document.getElementById('loginPage').style.display = 'none';
+        function checkPass() {
+            if(document.getElementById('passCode').value === correctPass) {
+                document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
             } else {
-                alert("خطأ في كلمة السر!");
+                alert("كلمة السر خاطئة! حاول مرة أخرى.");
             }
         }
 
-        function toggleMenu() {
+        function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function navTo(sectionId) {
+        function nav(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            toggleMenu();
+            document.getElementById(id).classList.add('active');
+            toggleSidebar();
         }
 
-        function updateSite() {
-            const link = document.getElementById('linkInput').value;
-            const type = document.getElementById('typeInput').value;
-            const msg = document.getElementById('msgInput').value;
-            const container = document.getElementById('mediaContainer');
-
-            // إضافة المحتوى
-            if(link) {
-                const element = document.createElement('div');
-                if(type === 'img') {
-                    element.innerHTML = `<img src="${link}" onclick="window.open(this.src)">`;
-                } else {
-                    element.innerHTML = `<video src="${link}" controls></video>`;
-                }
-                container.appendChild(element);
-                alert("تمت إضافة الوسائط!");
+        function addImg() {
+            let url = document.getElementById('imgUrl').value;
+            if(url) {
+                let img = document.createElement('img');
+                img.src = url;
+                document.getElementById('mediaGrid').appendChild(img);
+                alert("تمت إضافة الصورة للمعرض!");
+                document.getElementById('imgUrl').value = "";
             }
+        }
 
-            // تحديث الرسالة
-            if(msg) {
-                document.getElementById('letterDisplay').innerText = msg;
+        function updateText() {
+            let txt = document.getElementById('newText').value;
+            if(txt) {
+                document.getElementById('mainLetter').innerText = txt;
+                alert("تم تحديث الرسالة!");
+                document.getElementById('newText').value = "";
             }
-
-            // تصفير الحقول
-            document.getElementById('linkInput').value = "";
-            document.getElementById('msgInput').value = "";
         }
     </script>
 </body>
